@@ -2,6 +2,7 @@ package com.exraion.security.token
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.exraion.util.Config.tokenConfig
 import io.ktor.server.application.*
 
 class JWTTokenService: TokenService {

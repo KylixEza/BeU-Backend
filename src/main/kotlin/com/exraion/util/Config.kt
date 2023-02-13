@@ -1,0 +1,16 @@
+package com.exraion.util
+
+import com.exraion.security.token.TokenConfig
+import io.ktor.server.application.*
+
+object Config {
+
+    val Application.tokenConfig: TokenConfig
+        get() = TokenConfig(
+            issuer = System.getenv("JWT_ISSUER"),
+            audience = System.getenv("JWT_AUDIENCE"),
+            expiresIn = 365L * 1000L * 60L * 60L * 24L,
+            secret = System.getenv("JWT_SECRET")
+        )
+
+}
