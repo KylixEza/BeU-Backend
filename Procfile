@@ -1,0 +1,1 @@
+web: build/install/BeU-backend/bin/BeU-backend
