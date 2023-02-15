@@ -31,7 +31,7 @@ class AuthRoute(
             }
 
             val user = repository.insertUser(body, saltedHash)
-            val token = middleware.generateToken(TokenClaim("uid", user.uid),)
+            val token = middleware.generateToken(TokenClaim("uid", user.uid))
 
             call.buildSuccessJson { TokenResponse(token) }
         }

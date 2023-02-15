@@ -29,6 +29,5 @@ class JWTTokenService: TokenService {
         } catch (e: Exception) {
             throw IllegalAccessException(e.toString())
         }
-        token.saveToDb()
     }
 }
