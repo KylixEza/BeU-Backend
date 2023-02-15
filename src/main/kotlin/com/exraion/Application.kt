@@ -11,6 +11,7 @@ fun main() {
 }
 
 fun Application.module() {
+    configureInjection()
     configureSecurity()
     configureSerialization()
     configureDatabases()
