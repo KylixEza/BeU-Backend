@@ -1,6 +1,10 @@
 package com.exraion.di
 
 import com.exraion.data.database.DatabaseFactory
+import com.exraion.data.repositories.token.TokenRepository
+import com.exraion.data.repositories.token.TokenRepositoryImpl
+import com.exraion.data.repositories.user.UserRepository
+import com.exraion.data.repositories.user.UserRepositoryImpl
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.koin.dsl.module
@@ -31,5 +35,15 @@ val databaseModule = module {
             validate()
         }
         HikariDataSource(config)
+    }
+}
+
+val repositoryModule = module {
+    single<UserRepository> {
+        UserRepositoryImpl(get())
+    }
+
+    single<TokenRepository> {
+        TokenRepositoryImpl(get())
     }
 }
