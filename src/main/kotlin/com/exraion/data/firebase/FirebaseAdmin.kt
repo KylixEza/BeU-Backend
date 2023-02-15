@@ -8,7 +8,7 @@ import java.io.InputStream
 
 object FirebaseAdmin {
     private val serviceAccount: InputStream? =
-        this::class.java.classLoader.getResourceAsStream("beu-firebase-admin.json")
+        this::class.java.classLoader.getResourceAsStream("exraion-beu-2-firebase-admin.json")
 
     private val options: FirebaseOptions = FirebaseOptions.builder()
         .setCredentials(GoogleCredentials.fromStream(serviceAccount))
