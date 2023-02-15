@@ -8,7 +8,7 @@ import com.exraion.model.user.UserBody
 import com.exraion.model.user.UserResponse
 import com.exraion.util.toUser
 import com.exraion.util.toUserResponse
-import com.oreyo.security.hashing.SaltedHash
+import com.exraion.security.hashing.SaltedHash
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.update

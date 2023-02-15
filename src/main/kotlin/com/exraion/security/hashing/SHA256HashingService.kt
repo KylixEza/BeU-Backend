@@ -1,6 +1,5 @@
 package com.exraion.security.hashing
 
-import com.oreyo.security.hashing.SaltedHash
 import org.apache.commons.codec.binary.Hex
 import org.apache.commons.codec.digest.DigestUtils
 import java.security.SecureRandom

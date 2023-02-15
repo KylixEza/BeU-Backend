@@ -1,11 +1,10 @@
 package com.exraion.util
 
 import com.exraion.security.token.TokenConfig
-import io.ktor.server.application.*
 
 object Config {
 
-    val Application.tokenConfig: TokenConfig
+    val tokenConfig: TokenConfig
         get() = TokenConfig(
             issuer = System.getenv("JWT_ISSUER"),
             audience = System.getenv("JWT_AUDIENCE"),

@@ -1,4 +1,4 @@
-package com.oreyo.security.hashing
+package com.exraion.security.hashing
 
 data class SaltedHash(
     val hash: String,

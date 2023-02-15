@@ -4,7 +4,7 @@ import com.exraion.model.auth.RegisterBody
 import com.exraion.model.user.User
 import com.exraion.model.user.UserBody
 import com.exraion.model.user.UserResponse
-import com.oreyo.security.hashing.SaltedHash
+import com.exraion.security.hashing.SaltedHash
 
 interface UserRepository {
 
