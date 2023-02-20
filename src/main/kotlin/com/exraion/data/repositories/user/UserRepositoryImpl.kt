@@ -1,9 +1,12 @@
 package com.exraion.data.repositories.user
 
+import com.aventrix.jnanoid.jnanoid.NanoIdUtils
 import com.exraion.data.database.DatabaseFactory
 import com.exraion.data.tables.FavoriteTable
+import com.exraion.data.tables.ReviewTable
 import com.exraion.data.tables.UserTable
 import com.exraion.model.auth.RegisterBody
+import com.exraion.model.review.ReviewBody
 import com.exraion.model.user.User
 import com.exraion.model.user.UserBody
 import com.exraion.model.user.UserResponse
@@ -42,6 +45,15 @@ class UserRepositoryImpl(
             password = saltedHash.hash,
             salt = saltedHash.salt
         )
+    }
+
+    override suspend fun insertReview(uid: String, body: ReviewBody): Unit = dbFactory.dbQuery {
+        ReviewTable.insert {
+            it[reviewId] = "REVIEW${NanoIdUtils.randomNanoId()}"
+            it[menuId] = body.menuId
+            it[ReviewTable.uid] = uid
+            it[rating] = body.rating
+        }
     }
 
     override suspend fun getUserByEmail(email: String): User = dbFactory.dbQuery {
