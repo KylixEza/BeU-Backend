@@ -1,9 +1,7 @@
 package com.exraion.util
 
-import com.exraion.data.tables.FavoriteTable
-import com.exraion.data.tables.MenuTable
-import com.exraion.data.tables.ReviewTable
-import com.exraion.data.tables.UserTable
+import com.exraion.data.tables.*
+import com.exraion.model.history.HistoryResponse
 import com.exraion.model.menu.MenuDetailResponse
 import com.exraion.model.menu.MenuListResponse
 import com.exraion.model.review.ReviewResponse
@@ -71,4 +69,17 @@ fun ResultRow.toMenuDetailResponse(
     reviewsCount = this[Count(ReviewTable.rating).alias("review_count")],
     averageRating = this[Avg(ReviewTable.rating, 1).alias("rating")] ?: BigDecimal.valueOf(0.0),
     reviews = reviews,
+)
+
+fun ResultRow.toHistoryResponse(
+    ingredients: List<Pair<String, String>>
+) = HistoryResponse(
+    orderId = this[OrderTable.orderId],
+    menuId = this[MenuTable.menuId],
+    image = this[MenuTable.image],
+    title = this[MenuTable.title],
+    ingredients = ingredients.filter { it.first == this[OrderTable.orderId] }.map { it.second },
+    timeStamp = this[OrderTable.timeStamp],
+    status = this[OrderTable.status],
+    starsGiven = this[OrderTable.starsGiven],
 )

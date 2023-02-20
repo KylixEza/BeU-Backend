@@ -17,7 +17,7 @@ class DatabaseFactory(
 		transaction {
 			val tables = listOf(
 				UserTable, TokenBlacklistTable, MenuTable, ReviewTable, FavoriteTable,
-				IngredientTable, StepTable, ToolTable
+				IngredientTable, StepTable, ToolTable, OrderTable, OrderIngredientTable,
 			)
 			tables.forEach { table ->
 				SchemaUtils.create(table)

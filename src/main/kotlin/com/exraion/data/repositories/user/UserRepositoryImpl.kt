@@ -2,10 +2,10 @@ package com.exraion.data.repositories.user
 
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils
 import com.exraion.data.database.DatabaseFactory
-import com.exraion.data.tables.FavoriteTable
-import com.exraion.data.tables.ReviewTable
-import com.exraion.data.tables.UserTable
+import com.exraion.data.tables.*
 import com.exraion.model.auth.RegisterBody
+import com.exraion.model.history.HistoryResponse
+import com.exraion.model.order.OrderBody
 import com.exraion.model.review.ReviewBody
 import com.exraion.model.user.User
 import com.exraion.model.user.UserBody
@@ -13,8 +13,12 @@ import com.exraion.model.user.UserResponse
 import com.exraion.util.toUser
 import com.exraion.util.toUserResponse
 import com.exraion.security.hashing.SaltedHash
+import com.exraion.util.OrderStatus
+import com.exraion.util.toHistoryResponse
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 class UserRepositoryImpl(
@@ -53,6 +57,50 @@ class UserRepositoryImpl(
             it[menuId] = body.menuId
             it[ReviewTable.uid] = uid
             it[rating] = body.rating
+        }
+    }
+
+    override suspend fun insertOrder(uid: String, body: OrderBody): Unit = dbFactory.dbQuery {
+
+        val orderId = "ORDER${NanoIdUtils.randomNanoId()}"
+
+        val dateObj = Date()
+        val df: DateFormat = SimpleDateFormat("dd MMM yyyy, HH:mm")
+        df.timeZone = TimeZone.getTimeZone("Asia/Jakarta")
+        val dateCreated = df.format(dateObj)
+
+        OrderTable.insert {
+            it[OrderTable.orderId] = orderId
+            it[menuId] = body.menuId
+            it[OrderTable.uid] = uid
+            it[timeStamp] = dateCreated
+            it[status] = OrderStatus.PROCESSED.status
+            it[starsGiven] = 0
+            it[totalPrice] = body.totalPrice
+        }
+
+        body.ingredients.forEach { ingredient ->
+            OrderIngredientTable.insert {
+                it[OrderIngredientTable.orderId] = orderId
+                it[OrderIngredientTable.ingredient] = ingredient
+            }
+        }
+    }
+
+    override suspend fun getHistories(uid: String): List<HistoryResponse> = dbFactory.dbQuery {
+
+        val pairOrderIdAndIngredient = OrderTable.join(OrderIngredientTable, JoinType.INNER) {
+            OrderTable.orderId eq OrderIngredientTable.orderId
+        }.select { OrderTable.uid eq uid }.mapNotNull {
+            Pair(it[OrderTable.orderId], it[OrderIngredientTable.ingredient])
+        }
+
+        OrderTable.join(MenuTable, JoinType.INNER) {
+            OrderTable.menuId eq MenuTable.menuId
+        }.select {
+            OrderTable.uid.eq(uid)
+        }.mapNotNull {
+            it.toHistoryResponse(pairOrderIdAndIngredient)
         }
     }
 

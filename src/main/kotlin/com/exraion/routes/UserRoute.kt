@@ -6,6 +6,7 @@ import com.exraion.data.firebase.FirebaseStorageUrl.reference
 import com.exraion.data.repositories.user.UserRepository
 import com.exraion.middleware.Middleware
 import com.exraion.model.favorite.FavoriteBody
+import com.exraion.model.order.OrderBody
 import com.exraion.model.review.ReviewBody
 import com.exraion.model.user.UserBody
 import com.exraion.routes.RouteResponseHelper.buildSuccessJson
@@ -111,6 +112,28 @@ class UserRoute(
         }
     }
 
+    private fun Route.postOrder() {
+        authenticate {
+            post("/user/order") {
+                middleware.apply { call.validateToken() }
+                val uid = middleware.getClaim(call, "uid") ?: ""
+                val body = call.receive<OrderBody>()
+                repository.insertOrder(uid, body)
+                call.buildSuccessJson { "Thank you for the order!" }
+            }
+        }
+    }
+
+    private fun Route.getHistories() {
+        authenticate {
+            get("/user/history") {
+                middleware.apply { call.validateToken() }
+                val uid = middleware.getClaim(call, "uid") ?: ""
+                call.buildSuccessJson { repository.getHistories(uid) }
+            }
+        }
+    }
+
     fun Route.initRoute() {
         getDetailUser()
         updateUser()
@@ -118,6 +141,8 @@ class UserRoute(
         postFavorite()
         deleteFavorite()
         postReview()
+        postOrder()
+        getHistories()
     }
 
 }
