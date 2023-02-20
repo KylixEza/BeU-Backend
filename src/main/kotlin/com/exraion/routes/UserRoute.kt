@@ -5,6 +5,7 @@ import com.exraion.data.firebase.FirebaseStorageUrl.getDownloadUrl
 import com.exraion.data.firebase.FirebaseStorageUrl.reference
 import com.exraion.data.repositories.user.UserRepository
 import com.exraion.middleware.Middleware
+import com.exraion.model.favorite.FavoriteBody
 import com.exraion.model.user.UserBody
 import com.exraion.routes.RouteResponseHelper.buildSuccessJson
 import com.exraion.util.convert
@@ -75,10 +76,34 @@ class UserRoute(
         }
     }
 
+    private fun Route.postFavorite() {
+        authenticate {
+            post("/user/favorite") {
+                middleware.apply { call.validateToken() }
+                val uid = middleware.getClaim(call, "uid") ?: ""
+                val body = call.receive<FavoriteBody>()
+                call.buildSuccessJson { repository.insertFavorite(uid, body.menuId) }
+            }
+        }
+    }
+
+    private fun Route.deleteFavorite() {
+        authenticate {
+            delete("/user/favorite/{menuId}") {
+                middleware.apply { call.validateToken() }
+                val uid = middleware.getClaim(call, "uid") ?: ""
+                val menuId = call.parameters["menuId"] ?: ""
+                call.buildSuccessJson { repository.deleteFavorite(uid, menuId) }
+            }
+        }
+    }
+
     fun Route.initRoute() {
         getDetailUser()
         updateUser()
         updateUserAvatar()
+        postFavorite()
+        deleteFavorite()
     }
 
 }

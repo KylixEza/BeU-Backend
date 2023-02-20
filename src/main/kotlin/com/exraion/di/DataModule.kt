@@ -1,6 +1,8 @@
 package com.exraion.di
 
 import com.exraion.data.database.DatabaseFactory
+import com.exraion.data.repositories.menu.MenuRepository
+import com.exraion.data.repositories.menu.MenuRepositoryImpl
 import com.exraion.data.repositories.token.TokenRepository
 import com.exraion.data.repositories.token.TokenRepositoryImpl
 import com.exraion.data.repositories.user.UserRepository
@@ -45,5 +47,9 @@ val repositoryModule = module {
 
     single<TokenRepository> {
         TokenRepositoryImpl(get())
+    }
+
+    single<MenuRepository> {
+        MenuRepositoryImpl(get())
     }
 }

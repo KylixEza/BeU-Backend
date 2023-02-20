@@ -14,5 +14,7 @@ interface UserRepository {
     suspend fun updateUser(uid: String, body: UserBody) //clear
     suspend fun updateUserAvatar(uid: String, avatar: String) //clear
     suspend fun isEmailExist(email: String): Boolean //clear
+    suspend fun insertFavorite(uid: String, menuId: String)
+    suspend fun deleteFavorite(uid: String, menuId: String)
 
 }

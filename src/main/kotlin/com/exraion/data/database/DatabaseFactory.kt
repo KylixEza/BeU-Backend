@@ -1,7 +1,6 @@
 package com.exraion.data.database
 
-import com.exraion.data.tables.TokenBlacklistTable
-import com.exraion.data.tables.UserTable
+import com.exraion.data.tables.*
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -17,7 +16,7 @@ class DatabaseFactory(
 		Database.connect(dataSource)
 		transaction {
 			val tables = listOf(
-				UserTable, TokenBlacklistTable
+				UserTable, TokenBlacklistTable, MenuTable, ReviewTable, FavoriteTable
 			)
 			tables.forEach { table ->
 				SchemaUtils.create(table)

@@ -1,6 +1,7 @@
 package com.exraion.data.repositories.user
 
 import com.exraion.data.database.DatabaseFactory
+import com.exraion.data.tables.FavoriteTable
 import com.exraion.data.tables.UserTable
 import com.exraion.model.auth.RegisterBody
 import com.exraion.model.user.User
@@ -9,9 +10,8 @@ import com.exraion.model.user.UserResponse
 import com.exraion.util.toUser
 import com.exraion.util.toUserResponse
 import com.exraion.security.hashing.SaltedHash
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.update
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.util.*
 
 class UserRepositoryImpl(
@@ -90,4 +90,21 @@ class UserRepositoryImpl(
             it[UserTable.email]
         }
     }.isNotEmpty()
+
+    override suspend fun insertFavorite(uid: String, menuId: String) {
+        dbFactory.dbQuery {
+            FavoriteTable.insert { table ->
+                table[FavoriteTable.uid] = uid
+                table[FavoriteTable.menuId] = menuId
+            }
+        }
+    }
+
+    override suspend fun deleteFavorite(uid: String, menuId: String) {
+        dbFactory.dbQuery {
+            FavoriteTable.deleteWhere {
+                (FavoriteTable.uid eq uid) and (FavoriteTable.menuId eq menuId)
+            }
+        }
+    }
 }
