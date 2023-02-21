@@ -7,7 +7,6 @@ import com.exraion.model.ingredient.IngredientResponse
 import com.exraion.model.menu.MenuBody
 import com.exraion.model.menu.MenuDetailResponse
 import com.exraion.model.menu.MenuListResponse
-import com.exraion.model.review.ReviewBody
 import com.exraion.util.toMenuDetailResponse
 import com.exraion.util.toMenuListResponse
 import com.exraion.util.toReviewResponse

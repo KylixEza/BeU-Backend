@@ -11,7 +11,7 @@ object OrderTable: Table() {
 	val orderId = varchar("order_id", 128)
 	val timeStamp = varchar("time_stamp", 24).default("")
 	val status = varchar("status", 24)
-	val starsGiven = integer("stars").default(0)
+	val starsGiven = double("stars").default(0.0)
 	val totalPrice = integer("total_price").default(0)
 	
 	override val primaryKey: PrimaryKey = PrimaryKey(orderId)

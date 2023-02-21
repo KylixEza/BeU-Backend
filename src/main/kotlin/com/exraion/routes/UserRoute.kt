@@ -6,8 +6,8 @@ import com.exraion.data.firebase.FirebaseStorageUrl.reference
 import com.exraion.data.repositories.user.UserRepository
 import com.exraion.middleware.Middleware
 import com.exraion.model.favorite.FavoriteBody
+import com.exraion.model.history.HistoryUpdateStarsGiven
 import com.exraion.model.order.OrderBody
-import com.exraion.model.review.ReviewBody
 import com.exraion.model.user.UserBody
 import com.exraion.routes.RouteResponseHelper.buildSuccessJson
 import com.exraion.util.convert
@@ -100,18 +100,6 @@ class UserRoute(
         }
     }
 
-    private fun Route.postReview() {
-        authenticate {
-            post("/user/review") {
-                middleware.apply { call.validateToken() }
-                val uid = middleware.getClaim(call, "uid") ?: ""
-                val body = call.receive<ReviewBody>()
-                repository.insertReview(uid, body)
-                call.buildSuccessJson { "Thank you for the review!" }
-            }
-        }
-    }
-
     private fun Route.postOrder() {
         authenticate {
             post("/user/order") {
@@ -124,12 +112,36 @@ class UserRoute(
         }
     }
 
-    private fun Route.getHistories() {
+    private fun Route.getOrderHistory() {
         authenticate {
-            get("/user/history") {
+            get("/user/order") {
                 middleware.apply { call.validateToken() }
                 val uid = middleware.getClaim(call, "uid") ?: ""
-                call.buildSuccessJson { repository.getHistories(uid) }
+                call.buildSuccessJson { repository.getOrderHistory(uid) }
+            }
+        }
+    }
+
+    private fun Route.cancelOrder() {
+        authenticate {
+            put("/user/order/{orderId}/cancel") {
+                middleware.apply { call.validateToken() }
+                val orderId = call.parameters["orderId"] ?: ""
+                repository.cancelOrder(orderId)
+                call.buildSuccessJson { "Order cancelled" }
+            }
+        }
+    }
+
+    private fun Route.updateOrderStars() {
+        authenticate {
+            put("/user/order/{orderId}/rating") {
+                middleware.apply { call.validateToken() }
+                val uid = middleware.getClaim(call, "uid") ?: ""
+                val orderId = call.parameters["orderId"] ?: ""
+                val stars = call.receive<HistoryUpdateStarsGiven>()
+                repository.updateOrderStars(uid, orderId, stars.starsGiven)
+                call.buildSuccessJson { "Order stars updated" }
             }
         }
     }
@@ -140,9 +152,10 @@ class UserRoute(
         updateUserAvatar()
         postFavorite()
         deleteFavorite()
-        postReview()
         postOrder()
-        getHistories()
+        getOrderHistory()
+        cancelOrder()
+        updateOrderStars()
     }
 
 }

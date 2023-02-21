@@ -6,7 +6,6 @@ import com.exraion.data.tables.*
 import com.exraion.model.auth.RegisterBody
 import com.exraion.model.history.HistoryResponse
 import com.exraion.model.order.OrderBody
-import com.exraion.model.review.ReviewBody
 import com.exraion.model.user.User
 import com.exraion.model.user.UserBody
 import com.exraion.model.user.UserResponse
@@ -51,15 +50,6 @@ class UserRepositoryImpl(
         )
     }
 
-    override suspend fun insertReview(uid: String, body: ReviewBody): Unit = dbFactory.dbQuery {
-        ReviewTable.insert {
-            it[reviewId] = "REVIEW${NanoIdUtils.randomNanoId()}"
-            it[menuId] = body.menuId
-            it[ReviewTable.uid] = uid
-            it[rating] = body.rating
-        }
-    }
-
     override suspend fun insertOrder(uid: String, body: OrderBody): Unit = dbFactory.dbQuery {
 
         val orderId = "ORDER${NanoIdUtils.randomNanoId()}"
@@ -75,7 +65,7 @@ class UserRepositoryImpl(
             it[OrderTable.uid] = uid
             it[timeStamp] = dateCreated
             it[status] = OrderStatus.PROCESSED.status
-            it[starsGiven] = 0
+            it[starsGiven] = 0.0
             it[totalPrice] = body.totalPrice
         }
 
@@ -84,23 +74,6 @@ class UserRepositoryImpl(
                 it[OrderIngredientTable.orderId] = orderId
                 it[OrderIngredientTable.ingredient] = ingredient
             }
-        }
-    }
-
-    override suspend fun getHistories(uid: String): List<HistoryResponse> = dbFactory.dbQuery {
-
-        val pairOrderIdAndIngredient = OrderTable.join(OrderIngredientTable, JoinType.INNER) {
-            OrderTable.orderId eq OrderIngredientTable.orderId
-        }.select { OrderTable.uid eq uid }.mapNotNull {
-            Pair(it[OrderTable.orderId], it[OrderIngredientTable.ingredient])
-        }
-
-        OrderTable.join(MenuTable, JoinType.INNER) {
-            OrderTable.menuId eq MenuTable.menuId
-        }.select {
-            OrderTable.uid.eq(uid)
-        }.mapNotNull {
-            it.toHistoryResponse(pairOrderIdAndIngredient)
         }
     }
 
@@ -165,6 +138,52 @@ class UserRepositoryImpl(
             FavoriteTable.deleteWhere {
                 (FavoriteTable.uid eq uid) and (FavoriteTable.menuId eq menuId)
             }
+        }
+    }
+
+    override suspend fun getOrderHistory(uid: String): List<HistoryResponse> = dbFactory.dbQuery {
+
+        val pairOrderIdAndIngredient = OrderTable.join(OrderIngredientTable, JoinType.INNER) {
+            OrderTable.orderId eq OrderIngredientTable.orderId
+        }.select { OrderTable.uid eq uid }.mapNotNull {
+            Pair(it[OrderTable.orderId], it[OrderIngredientTable.ingredient])
+        }
+
+        OrderTable.join(MenuTable, JoinType.INNER) {
+            OrderTable.menuId eq MenuTable.menuId
+        }.select {
+            OrderTable.uid.eq(uid)
+        }.mapNotNull {
+            it.toHistoryResponse(pairOrderIdAndIngredient)
+        }
+    }
+
+    override suspend fun cancelOrder(orderId: String): Unit = dbFactory.dbQuery {
+        OrderTable.update(
+            where = { (OrderTable.orderId eq orderId) }
+        ) { table ->
+            table[status] = OrderStatus.CANCELLED.status
+        }
+    }
+
+    override suspend fun updateOrderStars(uid: String, orderId: String, stars: Double): Unit = dbFactory.dbQuery {
+        OrderTable.update(
+            where = { (OrderTable.orderId eq orderId) }
+        ) { table ->
+            table[starsGiven] = stars
+        }
+
+        val menuId = OrderTable.select {
+            OrderTable.orderId.eq(orderId)
+        }.firstNotNullOf {
+            it[OrderTable.menuId]
+        }
+
+        ReviewTable.insert {
+            it[reviewId] = "REVIEW${NanoIdUtils.randomNanoId()}"
+            it[ReviewTable.uid] = uid
+            it[ReviewTable.menuId] = menuId
+            it[rating] = stars
         }
     }
 }

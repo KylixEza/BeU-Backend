@@ -25,5 +25,5 @@ data class HistoryResponse(
     val status: String,
 
     @field:SerializedName("stars_given")
-    val starsGiven: Int,
+    val starsGiven: Double,
 )
