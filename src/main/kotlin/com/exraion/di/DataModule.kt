@@ -1,6 +1,8 @@
 package com.exraion.di
 
 import com.exraion.data.database.DatabaseFactory
+import com.exraion.data.repositories.leaderboard.LeaderboardRepository
+import com.exraion.data.repositories.leaderboard.LeaderboardRepositoryImpl
 import com.exraion.data.repositories.menu.MenuRepository
 import com.exraion.data.repositories.menu.MenuRepositoryImpl
 import com.exraion.data.repositories.token.TokenRepository
@@ -57,5 +59,9 @@ val repositoryModule = module {
 
     single<VoucherRepository> {
         VoucherRepositoryImpl(get())
+    }
+
+    single<LeaderboardRepository> {
+        LeaderboardRepositoryImpl(get())
     }
 }

@@ -24,7 +24,6 @@ fun ResultRow.toUser() = User(
 )
 
 fun ResultRow.toUserResponse() = UserResponse(
-    uid = this[UserTable.uid],
     location = this[UserTable.location],
     avatar = this[UserTable.avatar],
     beUPay = this[UserTable.beUPay],

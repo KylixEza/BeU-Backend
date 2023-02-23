@@ -4,9 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 data class UserResponse(
 
-	@field:SerializedName("uid")
-	val uid: String,
-
 	@field:SerializedName("address")
 	val location: String,
 
