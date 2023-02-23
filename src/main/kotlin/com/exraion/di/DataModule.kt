@@ -7,6 +7,8 @@ import com.exraion.data.repositories.token.TokenRepository
 import com.exraion.data.repositories.token.TokenRepositoryImpl
 import com.exraion.data.repositories.user.UserRepository
 import com.exraion.data.repositories.user.UserRepositoryImpl
+import com.exraion.data.repositories.voucher.VoucherRepository
+import com.exraion.data.repositories.voucher.VoucherRepositoryImpl
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import org.koin.dsl.module
@@ -51,5 +53,9 @@ val repositoryModule = module {
 
     single<MenuRepository> {
         MenuRepositoryImpl(get())
+    }
+
+    single<VoucherRepository> {
+        VoucherRepositoryImpl(get())
     }
 }

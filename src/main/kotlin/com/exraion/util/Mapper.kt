@@ -7,6 +7,8 @@ import com.exraion.model.menu.MenuListResponse
 import com.exraion.model.review.ReviewResponse
 import com.exraion.model.user.User
 import com.exraion.model.user.UserResponse
+import com.exraion.model.voucher.VoucherDetailResponse
+import com.exraion.model.voucher.VoucherListResponse
 import org.jetbrains.exposed.sql.Avg
 import org.jetbrains.exposed.sql.Count
 import org.jetbrains.exposed.sql.ResultRow
@@ -82,4 +84,24 @@ fun ResultRow.toHistoryResponse(
     timeStamp = this[OrderTable.timeStamp],
     status = this[OrderTable.status],
     starsGiven = this[OrderTable.starsGiven],
+)
+
+fun ResultRow.toVoucherListResponse() = VoucherListResponse(
+    voucherId = this[VoucherTable.voucherId],
+    category = this[VoucherTable.category],
+    xpCost = this[VoucherTable.xpCost],
+    validUntil = this[VoucherTable.validUntil],
+    discount = this[VoucherTable.discount],
+    minimumSpend = this[VoucherTable.minimumSpend],
+    maximumDiscount = this[VoucherTable.maximumDiscount],
+)
+
+fun ResultRow.toVoucherDetailResponse() = VoucherDetailResponse(
+    voucherId = this[VoucherTable.voucherId],
+    category = this[VoucherTable.category],
+    xpCost = this[VoucherTable.xpCost],
+    validUntil = this[VoucherTable.validUntil],
+    discount = this[VoucherTable.discount],
+    minimumSpend = this[VoucherTable.minimumSpend],
+    maximumDiscount = this[VoucherTable.maximumDiscount],
 )
