@@ -37,6 +37,7 @@ fun ResultRow.toMenuListResponse(uid: String) = MenuListResponse(
     menuId = this[MenuTable.menuId],
     image = this[MenuTable.image],
     title = this[MenuTable.title],
+    difficulty = this[MenuTable.difficulty],
     rangePrice = "Rp ${this[MenuTable.startPrice]} - Rp ${this[MenuTable.endPrice]}",
     rating = this[Avg(ReviewTable.rating, 1).alias("rating")] ?: BigDecimal.valueOf(0.0),
     cookTime = this[MenuTable.cookTime],

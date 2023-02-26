@@ -13,6 +13,9 @@ data class MenuListResponse(
     @field:SerializedName("title")
     val title: String,
 
+    @field:SerializedName("difficulty")
+    val difficulty: String,
+
     @field:SerializedName("range_price")
     val rangePrice: String,
 
