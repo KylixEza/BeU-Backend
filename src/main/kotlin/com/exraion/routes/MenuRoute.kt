@@ -66,24 +66,14 @@ class MenuRoute(
 
                 val uid = middleware.getClaim(call, "uid") ?: ""
                 val query = call.request.queryParameters["query"]
+                val category = call.request.queryParameters["category"]
                 val menus = if (query != null) {
                     menuRepository.getMenusBySearch(uid, query)
+                } else if (category != null) {
+                    menuRepository.getCategorizedMenus(uid, category)
                 } else {
                     menuRepository.getRandomMenus(uid)
                 }
-                call.buildSuccessListJson { menus }
-            }
-        }
-    }
-
-    private fun Route.getCategorizedMenus() {
-        authenticate {
-            get("/menu/category/{category}") {
-                middleware.apply { call.validateToken() }
-
-                val uid = middleware.getClaim(call, "uid") ?: ""
-                val category = call.parameters["category"] ?: ""
-                val menus = menuRepository.getCategorizedMenus(uid, category)
                 call.buildSuccessListJson { menus }
             }
         }
@@ -132,7 +122,6 @@ class MenuRoute(
         postIngredient()
         postTool()
         getMenus()
-        getCategorizedMenus()
         getDietMenus()
         getDetailMenu()
         getIngredients()
