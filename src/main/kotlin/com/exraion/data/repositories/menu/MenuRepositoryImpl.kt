@@ -7,6 +7,7 @@ import com.exraion.model.ingredient.IngredientResponse
 import com.exraion.model.menu.MenuBody
 import com.exraion.model.menu.MenuDetailResponse
 import com.exraion.model.menu.MenuListResponse
+import com.exraion.util.toIngredientResponse
 import com.exraion.util.toMenuDetailResponse
 import com.exraion.util.toMenuListResponse
 import com.exraion.util.toReviewResponse
@@ -162,13 +163,9 @@ class MenuRepositoryImpl(
             ) }.first()
     }
 
-    override suspend fun getIngredients(menuId: String): IngredientResponse = dbFactory.dbQuery {
-        val ingredients = IngredientTable.select { (IngredientTable.menuId eq menuId) }
-            .map { it[IngredientTable.ingredient] }
-
-        IngredientResponse(
-            menuId = menuId,
-            ingredients = ingredients
-        )
+    override suspend fun getIngredients(menuId: String): List<IngredientResponse> = dbFactory.dbQuery {
+        IngredientTable
+            .select { (IngredientTable.menuId eq menuId) }
+            .map { it.toIngredientResponse() }
     }
 }

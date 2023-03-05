@@ -111,7 +111,7 @@ class MenuRoute(
 
                 val menuId = call.parameters["menuId"] ?: ""
                 val ingredients = menuRepository.getIngredients(menuId)
-                call.buildSuccessJson { ingredients }
+                call.buildSuccessListJson { ingredients }
             }
         }
     }

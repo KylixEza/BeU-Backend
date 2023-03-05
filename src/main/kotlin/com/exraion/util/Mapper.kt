@@ -2,6 +2,7 @@ package com.exraion.util
 
 import com.exraion.data.tables.*
 import com.exraion.model.history.HistoryResponse
+import com.exraion.model.ingredient.IngredientResponse
 import com.exraion.model.menu.MenuDetailResponse
 import com.exraion.model.menu.MenuListResponse
 import com.exraion.model.review.ReviewResponse
@@ -71,6 +72,11 @@ fun ResultRow.toMenuDetailResponse(
     reviewsCount = this[Count(ReviewTable.rating).alias("review_count")],
     averageRating = this[Avg(ReviewTable.rating, 1).alias("rating")] ?: BigDecimal.valueOf(0.0),
     reviews = reviews,
+)
+
+fun ResultRow.toIngredientResponse() = IngredientResponse(
+    ingredient = this[IngredientTable.ingredient],
+    price = this[IngredientTable.price]
 )
 
 fun ResultRow.toHistoryResponse(

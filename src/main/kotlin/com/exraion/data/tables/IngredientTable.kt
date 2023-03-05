@@ -8,4 +8,5 @@ object IngredientTable: Table() {
 
     val menuId = reference("menu_id", MenuTable.menuId)
     val ingredient = varchar("ingredient", 128)
+    val price = integer("price").default(0)
 }

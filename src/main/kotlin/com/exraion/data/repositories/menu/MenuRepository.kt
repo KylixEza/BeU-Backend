@@ -16,5 +16,5 @@ interface MenuRepository {
     suspend fun getCategorizedMenus(uid: String, category: String): List<MenuListResponse>
     suspend fun getMenusBySearch(uid: String, query: String): List<MenuListResponse>
     suspend fun getDetailMenu(uid: String, menuId: String): MenuDetailResponse
-    suspend fun getIngredients(menuId: String): IngredientResponse
+    suspend fun getIngredients(menuId: String): List<IngredientResponse>
 }
