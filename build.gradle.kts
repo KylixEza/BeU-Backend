@@ -25,6 +25,7 @@ application {
 
 repositories {
     mavenCentral()
+    maven("https://jitpack.io")
 }
 
 tasks.create("stage") {
@@ -61,7 +62,6 @@ dependencies {
     //Hikari
     implementation("com.zaxxer:HikariCP:$hikari_version")
 
-    //Firebase
-    implementation("org.slf4j:slf4j-simple:2.0.5")
-    implementation("com.google.firebase:firebase-admin:9.1.1")
+    //Firetor
+    implementation("com.github.KylixEza:firetor:0.1.0")
 }
