@@ -9,11 +9,11 @@ import com.exraion.model.order.OrderBody
 import com.exraion.model.user.User
 import com.exraion.model.user.UserBody
 import com.exraion.model.user.UserResponse
-import com.exraion.util.toUser
-import com.exraion.util.toUserResponse
 import com.exraion.security.hashing.SaltedHash
-import com.exraion.util.OrderStatus
-import com.exraion.util.toHistoryResponse
+import com.exraion.util.*
+import com.kylix.FirebaseStorageImage.uploadImage
+import com.kylix.ImageExtension
+import io.ktor.http.content.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.text.DateFormat
@@ -108,11 +108,16 @@ class UserRepositoryImpl(
         }
     }
 
-    override suspend fun updateUserAvatar(uid: String, avatar: String): Unit = dbFactory.dbQuery {
+    override suspend fun updateUserAvatar(uid: String, part: PartData.FileItem): Unit = dbFactory.dbQuery {
+        val url = part.uploadImage(
+            "avatar_path/$uid",
+            ImageExtension.JPG
+        ) { it.compress(0.4f) }
+
         UserTable.update(
-            where = {UserTable.uid.eq(uid)}
+            where = { UserTable.uid.eq(uid) }
         ) { table ->
-            table[UserTable.avatar] = avatar
+            table[avatar] = url
         }
     }
 

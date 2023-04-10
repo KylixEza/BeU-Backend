@@ -1,8 +1,5 @@
 package com.exraion.routes
 
-import com.exraion.data.firebase.FirebaseStorageUrl
-import com.exraion.data.firebase.FirebaseStorageUrl.getDownloadUrl
-import com.exraion.data.firebase.FirebaseStorageUrl.reference
 import com.exraion.data.repositories.user.UserRepository
 import com.exraion.middleware.Middleware
 import com.exraion.model.favorite.FavoriteBody
@@ -10,8 +7,6 @@ import com.exraion.model.history.HistoryUpdateStarsGiven
 import com.exraion.model.order.OrderBody
 import com.exraion.model.user.UserBody
 import com.exraion.routes.RouteResponseHelper.buildSuccessJson
-import com.exraion.util.convert
-import com.google.firebase.cloud.StorageClient
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
@@ -24,7 +19,6 @@ class UserRoute(
     private val repository: UserRepository,
     private val middleware: Middleware,
 ) {
-    private val bucket = StorageClient.getInstance().bucket()
 
     private fun Route.getDetailUser() {
         authenticate {
@@ -52,23 +46,14 @@ class UserRoute(
             put("/user/avatar") {
                 middleware.apply { call.validateToken() }
                 val uid = middleware.getClaim(call, "uid") ?: ""
-
                 val multipart = call.receiveMultipart()
-                var urlPath = ""
 
                 try {
                     multipart.forEachPart { part ->
                         if (part is PartData.FileItem) {
-                            val (fileName, fileBytes) = part.convert(compressQuality = 0.5f)
-                            bucket.create("avatar_path/$uid/$fileName", fileBytes, "image/png")
-                            urlPath = FirebaseStorageUrl
-                                .basePath
-                                .reference("avatar_path")
-                                .reference(uid)
-                                .getDownloadUrl(fileName)
+                            repository.updateUserAvatar(uid, part)
                         }
                     }
-                    repository.updateUserAvatar(uid, urlPath)
                     call.buildSuccessJson { "Avatar updated" }
                 } catch (e: Exception) {
                     e.printStackTrace()

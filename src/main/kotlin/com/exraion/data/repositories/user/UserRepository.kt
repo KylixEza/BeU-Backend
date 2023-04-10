@@ -7,6 +7,7 @@ import com.exraion.model.user.User
 import com.exraion.model.user.UserBody
 import com.exraion.model.user.UserResponse
 import com.exraion.security.hashing.SaltedHash
+import io.ktor.http.content.*
 
 interface UserRepository {
 
@@ -15,7 +16,7 @@ interface UserRepository {
     suspend fun getUserByEmail(email: String): User? //clear
     suspend fun getDetailUser(uid: String): UserResponse //clear
     suspend fun updateUser(uid: String, body: UserBody) //clear
-    suspend fun updateUserAvatar(uid: String, avatar: String) //clear
+    suspend fun updateUserAvatar(uid: String, part: PartData.FileItem) //clear
     suspend fun isEmailExist(email: String): Boolean //clear
     suspend fun insertFavorite(uid: String, menuId: String) //clear
     suspend fun deleteFavorite(uid: String, menuId: String) //clear

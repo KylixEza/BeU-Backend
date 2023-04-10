@@ -1,10 +1,9 @@
 package com.exraion
 
-import com.exraion.data.firebase.FirebaseAdmin
+import com.exraion.plugins.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import com.exraion.plugins.*
 
 fun main() {
     embeddedServer(
@@ -16,10 +15,10 @@ fun main() {
 }
 
 fun Application.module() {
-    FirebaseAdmin.init()
     configureInjection()
     configureSecurity()
     configureSerialization()
     configureMonitoring()
     configureRouting()
+    configureFiretor()
 }
