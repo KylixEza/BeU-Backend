@@ -9,4 +9,5 @@ val routeModule = module {
     factory { MenuRoute(get(), get()) }
     factory { VoucherRoute(get(), get()) }
     factory { LeaderboardRoute(get(), get()) }
+    factory { DailyXpRoute(get(), get()) }
 }

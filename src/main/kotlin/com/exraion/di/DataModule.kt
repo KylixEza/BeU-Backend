@@ -1,6 +1,8 @@
 package com.exraion.di
 
 import com.exraion.data.database.DatabaseFactory
+import com.exraion.data.repositories.daily_xp.DailyXpRepository
+import com.exraion.data.repositories.daily_xp.DailyXpRepositoryImpl
 import com.exraion.data.repositories.leaderboard.LeaderboardRepository
 import com.exraion.data.repositories.leaderboard.LeaderboardRepositoryImpl
 import com.exraion.data.repositories.menu.MenuRepository
@@ -63,5 +65,9 @@ val repositoryModule = module {
 
     single<LeaderboardRepository> {
         LeaderboardRepositoryImpl(get())
+    }
+
+    single<DailyXpRepository>() {
+        DailyXpRepositoryImpl(get())
     }
 }

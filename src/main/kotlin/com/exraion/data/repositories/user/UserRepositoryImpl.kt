@@ -41,6 +41,17 @@ class UserRepositoryImpl(
             }
         }
 
+        val allDailyXpIds = DailyXpTable.selectAll().map { it[DailyXpTable.dailyXpId] }
+
+        for (dailyXpId in allDailyXpIds) {
+            DailyXpUserTable.insert { table ->
+                table[DailyXpUserTable.dailyXpId] = dailyXpId
+                table[uid] = uuid
+                table[dayTaken] = null
+                table[isTaken] = false
+            }
+        }
+
         return User(
             uid = uuid,
             email = body.email,
