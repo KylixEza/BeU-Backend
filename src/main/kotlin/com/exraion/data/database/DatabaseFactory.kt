@@ -18,7 +18,7 @@ class DatabaseFactory(
 			val tables = listOf(
 				UserTable, TokenBlacklistTable, MenuTable, ReviewTable, FavoriteTable,
 				IngredientTable, StepTable, ToolTable, OrderTable, OrderIngredientTable,
-				VoucherTable, VoucherUserTable
+				VoucherTable, VoucherUserTable, DailyXpTable, DailyXpUserTable
 			)
 			tables.forEach { table ->
 				SchemaUtils.create(table)
