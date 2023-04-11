@@ -1,6 +1,7 @@
 package com.exraion.util
 
 import com.exraion.data.tables.*
+import com.exraion.model.daily_xp.DailyXpResponse
 import com.exraion.model.history.HistoryResponse
 import com.exraion.model.ingredient.IngredientResponse
 import com.exraion.model.menu.MenuDetailResponse
@@ -111,3 +112,11 @@ fun ResultRow.toVoucherDetailResponse() = VoucherDetailResponse(
     minimumSpend = this[VoucherTable.minimumSpend],
     maximumDiscount = this[VoucherTable.maximumDiscount],
 )
+
+fun ResultRow.toDailyXpResponse() = DailyXpResponse(
+    dailyXpId = this[DailyXpTable.dailyXpId],
+    dailyXp = this[DailyXpTable.dailyXp],
+    day = this[DailyXpTable.day],
+    isTaken = this[DailyXpUserTable.isTaken]
+)
+

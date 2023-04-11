@@ -9,7 +9,10 @@ import io.ktor.server.response.*
 
 object RouteResponseHelper {
 
-    suspend inline fun <reified T> ApplicationCall.buildSuccessJson(noinline action: suspend () -> T) {
+    suspend inline fun <reified T> ApplicationCall.buildSuccessJson(
+        messagePlaceholder: String? = null,
+        noinline action: suspend () -> T
+    ) {
         try {
             val data = action()
             this.respond(
@@ -17,7 +20,7 @@ object RouteResponseHelper {
                 BaseResponse(
                     HttpStatusCode.OK.value.toString(),
                     "Success",
-                    if (data is Unit) "Nothing" else data
+                    if (data is Unit) messagePlaceholder else data
                 )
             )
         } catch (e: Exception) {

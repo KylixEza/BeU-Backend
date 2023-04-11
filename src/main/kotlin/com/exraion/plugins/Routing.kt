@@ -13,6 +13,7 @@ fun Application.configureRouting() {
     val menuRoute by inject<MenuRoute>()
     val voucherRoute by inject<VoucherRoute>()
     val leaderboardRoute by inject<LeaderboardRoute>()
+    val dailyXpRoute by inject<DailyXpRoute>()
 
     routing {
         get("/") {
@@ -23,5 +24,6 @@ fun Application.configureRouting() {
         menuRoute.apply { this@routing.initRoute() }
         voucherRoute.apply { this@routing.initRoute() }
         leaderboardRoute.apply { this@routing.initRoute() }
+        dailyXpRoute.apply { this@routing.initRoute() }
     }
 }

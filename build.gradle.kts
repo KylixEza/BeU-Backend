@@ -58,6 +58,7 @@ dependencies {
 
     //Util
     implementation("com.aventrix.jnanoid:jnanoid:$jnanoid_version")
+    implementation("commons-codec:commons-codec:1.15")
 
     //Hikari
     implementation("com.zaxxer:HikariCP:$hikari_version")
