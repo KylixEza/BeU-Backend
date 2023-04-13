@@ -121,9 +121,9 @@ class UserRepositoryImpl(
 
     override suspend fun updateUserAvatar(uid: String, part: PartData.FileItem): Unit = dbFactory.dbQuery {
         val url = part.uploadImage(
-            "avatar_path/$uid",
+            "avatar/$uid",
             ImageExtension.JPG
-        ) { it.compress(0.4f) }
+        ) { it.compress(0.5f) }
 
         UserTable.update(
             where = { UserTable.uid.eq(uid) }

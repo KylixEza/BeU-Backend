@@ -64,5 +64,5 @@ dependencies {
     implementation("com.zaxxer:HikariCP:$hikari_version")
 
     //Firetor
-    implementation("com.github.KylixEza:firetor:0.1.0")
+    implementation("com.github.KylixEza:firetor:0.1.1")
 }
