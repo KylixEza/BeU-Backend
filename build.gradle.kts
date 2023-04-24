@@ -17,7 +17,7 @@ plugins {
 group = "com.exraion"
 version = "1.0.0"
 application {
-    mainClass.set("com.exraion.ApplicationKt")
+    mainClass.set("com.exraion.Application.kt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
