@@ -32,6 +32,12 @@ tasks.create("stage") {
     dependsOn("installDist")
 }
 
+tasks.jar {
+    manifest {
+        attributes["Main-Class"] = "com.exraion.ApplicationKt"
+    }
+}
+
 dependencies {
     implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
