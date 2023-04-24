@@ -201,7 +201,7 @@ fi
 
 set -- \
         -classpath "$CLASSPATH" \
-        com.exraion.Application.kt \
+        com.exraion.ApplicationKt \
         "$@"
 
 # Stop when "xargs" is not available.

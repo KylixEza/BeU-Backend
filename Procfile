@@ -1,1 +1,1 @@
-web: build/install/BeU-backend/bin/BeU-backend
+web: java -jar build/libs/BeU-backend-1.0.0.jar
