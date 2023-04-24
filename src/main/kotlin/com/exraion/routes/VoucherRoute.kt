@@ -66,7 +66,7 @@ class VoucherRoute(
 
     private fun Route.updateUsedVoucher() {
         authenticate {
-            put("/voucher/{voucherId}/used") {
+            put("/voucher/{voucherId}/use") {
                 middleware.apply { call.validateToken() }
                 val uid = middleware.getClaim(call, "uid") ?: ""
                 val voucherId = call.parameters["voucherId"] ?: ""
