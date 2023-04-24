@@ -4,6 +4,7 @@ import com.exraion.data.repositories.voucher.VoucherRepository
 import com.exraion.middleware.Middleware
 import com.exraion.model.voucher.VoucherBody
 import com.exraion.routes.RouteResponseHelper.buildSuccessJson
+import com.exraion.routes.RouteResponseHelper.buildSuccessListJson
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.request.*
@@ -49,7 +50,7 @@ class VoucherRoute(
             get("/voucher/user") {
                 middleware.apply { call.validateToken() }
                 val uid = middleware.getClaim(call, "uid") ?: ""
-                call.buildSuccessJson { repository.getVoucherUser(uid) }
+                call.buildSuccessListJson { repository.getVoucherUser(uid) }
             }
         }
     }
