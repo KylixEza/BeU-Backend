@@ -1,1 +1,0 @@
-web: java $JAVA_OPTS -jar build/libs/BeU-backend-all.jar
