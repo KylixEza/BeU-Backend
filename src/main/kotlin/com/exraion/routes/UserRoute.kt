@@ -7,6 +7,7 @@ import com.exraion.model.history.HistoryUpdateStarsGiven
 import com.exraion.model.order.OrderBody
 import com.exraion.model.user.UserBody
 import com.exraion.routes.RouteResponseHelper.buildSuccessJson
+import com.exraion.routes.RouteResponseHelper.buildSuccessListJson
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.application.*
@@ -102,7 +103,7 @@ class UserRoute(
             get("/user/order") {
                 middleware.apply { call.validateToken() }
                 val uid = middleware.getClaim(call, "uid") ?: ""
-                call.buildSuccessJson { repository.getOrderHistory(uid) }
+                call.buildSuccessListJson { repository.getOrderHistory(uid) }
             }
         }
     }
