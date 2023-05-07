@@ -3,6 +3,7 @@ package com.exraion.data.repositories.menu
 import com.aventrix.jnanoid.jnanoid.NanoIdUtils
 import com.exraion.data.database.DatabaseFactory
 import com.exraion.data.tables.*
+import com.exraion.model.ingredient.IngredientBody
 import com.exraion.model.ingredient.IngredientResponse
 import com.exraion.model.menu.MenuBody
 import com.exraion.model.menu.MenuDetailResponse
@@ -89,10 +90,11 @@ class MenuRepositoryImpl(
         }
     }
 
-    override suspend fun insertIngredient(menuId: String, ingredient: String): Unit = dbFactory.dbQuery {
+    override suspend fun insertIngredient(menuId: String, body: IngredientBody): Unit = dbFactory.dbQuery {
         IngredientTable.insert {
             it[IngredientTable.menuId] = menuId
-            it[IngredientTable.ingredient] = ingredient
+            it[ingredient] = body.ingredient
+            it[price] = body.price
         }
     }
 

@@ -4,5 +4,8 @@ import com.google.gson.annotations.SerializedName
 
 data class IngredientBody(
     @field:SerializedName("ingredient")
-    val ingredient: String
+    val ingredient: String,
+
+    @field:SerializedName("price")
+    val price: Int,
 )
