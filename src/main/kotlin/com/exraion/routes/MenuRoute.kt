@@ -45,7 +45,7 @@ class MenuRoute(
         post("/menu/{menuId}/ingredient") {
             val menuId = call.parameters["menuId"] ?: ""
             val body = call.receive<IngredientBody>()
-            menuRepository.insertIngredient(menuId, body.ingredient)
+            menuRepository.insertIngredient(menuId, body)
             call.buildSuccessJson { "Ingredient successfully added" }
         }
     }

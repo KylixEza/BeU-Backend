@@ -1,5 +1,6 @@
 package com.exraion.data.repositories.menu
 
+import com.exraion.model.ingredient.IngredientBody
 import com.exraion.model.ingredient.IngredientResponse
 import com.exraion.model.menu.MenuBody
 import com.exraion.model.menu.MenuDetailResponse
@@ -9,7 +10,7 @@ interface MenuRepository {
 
     suspend fun insertMenu(body: MenuBody)
     suspend fun insertStep(menuId: String, step: String)
-    suspend fun insertIngredient(menuId: String, ingredient: String)
+    suspend fun insertIngredient(menuId: String, body: IngredientBody)
     suspend fun insertTool(menuId: String, tool: String)
     suspend fun getRandomMenus(uid: String): List<MenuListResponse>
     suspend fun getDietMenus(uid: String): List<MenuListResponse>
