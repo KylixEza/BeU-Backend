@@ -11,6 +11,9 @@ data class MenuDetailResponse(
     @field:SerializedName("title")
     val title: String,
 
+    @field:SerializedName("image")
+    val image: String,
+
     @field:SerializedName("video_url")
     val videoUrl: String,
 
