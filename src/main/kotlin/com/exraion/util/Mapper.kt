@@ -61,6 +61,7 @@ fun ResultRow.toMenuDetailResponse(
     ) = MenuDetailResponse(
     menuId = this[MenuTable.menuId],
     title = this[MenuTable.title],
+    image = this[MenuTable.image],
     videoUrl = this[MenuTable.videoUrl],
     isFavorite = this[FavoriteTable.uid] == uid,
     isAvailable = this[MenuTable.isAvailable],
