@@ -91,6 +91,18 @@ class MenuRoute(
         }
     }
 
+    private fun Route.getExclusiveMenus() {
+        authenticate {
+            get("/menu/exclusive") {
+                middleware.apply { call.validateToken() }
+
+                val uid = middleware.getClaim(call, "uid") ?: ""
+                val menus = menuRepository.getExclusiveMenus(uid)
+                call.buildSuccessListJson { menus }
+            }
+        }
+    }
+
     private fun Route.getDetailMenu() {
         authenticate {
             get("/menu/{menuId}") {
@@ -123,6 +135,7 @@ class MenuRoute(
         postTool()
         getMenus()
         getDietMenus()
+        getExclusiveMenus()
         getDetailMenu()
         getIngredients()
     }
