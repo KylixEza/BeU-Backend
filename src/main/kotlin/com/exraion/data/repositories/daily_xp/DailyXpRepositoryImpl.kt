@@ -9,6 +9,7 @@ import com.exraion.model.daily_xp.DailyXpRequest
 import com.exraion.model.daily_xp.DailyXpResponse
 import com.exraion.util.*
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 
 class DailyXpRepositoryImpl(
     private val dbFactory: DatabaseFactory
@@ -96,6 +97,11 @@ class DailyXpRepositoryImpl(
         DailyXpUserTable.update(where = { (DailyXpUserTable.uid eq uid) and (DailyXpUserTable.dailyXpId eq body.dailyXpId) }) {
             it[dayTaken] = createTimeStamp(DateFormat.DATE)
             it[isTaken] = true
+        }
+
+        val dailyXp = DailyXpTable.select { DailyXpTable.dailyXpId eq body.dailyXpId }.first()[DailyXpTable.dailyXp]
+        UserTable.update(where = { UserTable.uid eq uid }) {
+            it[xp] = xp plus dailyXp
         }
     }
 }
