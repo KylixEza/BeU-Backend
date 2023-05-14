@@ -83,10 +83,8 @@ class VoucherRoute(
                 middleware.apply { call.validateToken() }
                 val uid = middleware.getClaim(call, "uid") ?: ""
                 val voucherSecretRedeemKey = call.parameters["secretKey"] ?: ""
-                val isExist = repository.searchVoucherUsingSecretKey(uid, voucherSecretRedeemKey)
-                call.buildSuccessJson {
-                    if (isExist) "Voucher successfully redeemed" else "Voucher not found"
-                }
+                val response = repository.searchVoucherUsingSecretKey(uid, voucherSecretRedeemKey)
+                call.buildSuccessJson { response }
             }
         }
     }
