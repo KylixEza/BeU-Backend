@@ -27,4 +27,7 @@ data class MenuListResponse(
 
     @field:SerializedName("is_favorite")
     val isFavorite: Boolean,
+
+    @field:SerializedName("is_exclusive")
+    val isExclusive: Boolean
 )

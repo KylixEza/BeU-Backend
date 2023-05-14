@@ -32,6 +32,7 @@ class MenuRepositoryImpl(
                 MenuTable.endPrice,
                 Avg(ReviewTable.rating, 1).alias("rating"),
                 MenuTable.title,
+                MenuTable.isExclusive,
                 FavoriteTable.uid
             )
     }
