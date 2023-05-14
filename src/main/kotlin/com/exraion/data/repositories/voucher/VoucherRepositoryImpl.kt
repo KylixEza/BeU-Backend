@@ -8,6 +8,7 @@ import com.exraion.data.tables.VoucherUserTable
 import com.exraion.model.voucher.VoucherAvailableResponse
 import com.exraion.model.voucher.VoucherBody
 import com.exraion.model.voucher.VoucherListResponse
+import com.exraion.model.voucher.VoucherSecretResponse
 import com.exraion.util.VoucherCategory
 import com.exraion.util.toVoucherDetailResponse
 import com.exraion.util.toVoucherListResponse
@@ -102,23 +103,36 @@ class VoucherRepositoryImpl(
         }
     }
 
-    override suspend fun searchVoucherUsingSecretKey(uid: String, voucherSecretRedeemKey: String): Boolean = dbFactory.dbQuery {
+    override suspend fun searchVoucherUsingSecretKey(uid: String, voucherSecretRedeemKey: String): VoucherSecretResponse = dbFactory.dbQuery {
         val isExist = VoucherTable.select {
             VoucherTable.voucherSecretRedeemKey.eq(voucherSecretRedeemKey)
         }.count() > 0
 
-        if (isExist) {
-            val voucherId = VoucherTable.select {
-                VoucherTable.voucherSecretRedeemKey.eq(voucherSecretRedeemKey)
-            }.firstNotNullOf { it[VoucherTable.voucherId] }
+        val voucherId = VoucherTable.select {
+            VoucherTable.voucherSecretRedeemKey.eq(voucherSecretRedeemKey)
+        }.firstNotNullOf { it[VoucherTable.voucherId] }
 
+        val isAlreadyClaimed = VoucherUserTable.select {
+            (VoucherUserTable.uid.eq(uid)) and (VoucherUserTable.voucherId.eq(voucherId))
+        }.count() > 0
+
+        val response = if (isExist && isAlreadyClaimed.not()) {
             VoucherUserTable.insert {
                 it[this.uid] = uid
                 it[this.voucherId] = voucherId
                 it[this.isUsed] = false
             }
+            VoucherSecretResponse(
+                true,
+                "Voucher successfully claimed"
+            )
+        } else {
+            VoucherSecretResponse(
+                false,
+                "Voucher already claimed or not exist"
+            )
         }
 
-        return@dbQuery isExist
+        return@dbQuery response
     }
 }
