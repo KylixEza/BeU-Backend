@@ -31,17 +31,17 @@ object RouteResponseHelper {
     suspend inline fun ApplicationCall.buildErrorJson(exception: Exception) {
         when (exception) {
             is BadRequestException -> this.respond(
-                HttpStatusCode.BadRequest,
+                HttpStatusCode.OK,
                 BaseResponse(HttpStatusCode.BadRequest.value.toString(), exception.message.toString(), null)
             )
 
             is NotFoundException -> this.respond(
-                HttpStatusCode.NotFound,
+                HttpStatusCode.OK,
                 BaseResponse(HttpStatusCode.NotFound.value.toString(), exception.message.toString(), null)
             )
 
             else -> this.respond(
-                HttpStatusCode.Conflict,
+                HttpStatusCode.OK,
                 BaseResponse(HttpStatusCode.Conflict.value.toString(), exception.message.toString(), null)
             )
         }
@@ -73,7 +73,7 @@ object RouteResponseHelper {
         val listResponse = BaseListResponse(message = e.message.toString(), count = 0, data = arrayListOf<Any>())
         when (e) {
             is BadRequestException -> {
-                listResponse.status = HttpStatusCode.BadRequest.value.toString()
+                listResponse.status = HttpStatusCode.OK.value.toString()
                 this.respond(
                     HttpStatusCode.BadRequest,
                     listResponse
@@ -81,7 +81,7 @@ object RouteResponseHelper {
             }
 
             is NotFoundException -> {
-                listResponse.status = HttpStatusCode.NotFound.value.toString()
+                listResponse.status = HttpStatusCode.OK.value.toString()
                 this.respond(
                     HttpStatusCode.NotFound,
                     listResponse
@@ -89,7 +89,7 @@ object RouteResponseHelper {
             }
 
             else -> {
-                listResponse.status = HttpStatusCode.Conflict.value.toString()
+                listResponse.status = HttpStatusCode.OK.value.toString()
                 this.respond(
                     HttpStatusCode.NotFound,
                     listResponse
