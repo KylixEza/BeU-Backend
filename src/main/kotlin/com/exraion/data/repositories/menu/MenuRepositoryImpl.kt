@@ -121,6 +121,14 @@ class MenuRepositoryImpl(
             .map { it.toMenuListResponse(uid) }
     }
 
+    override suspend fun getExclusiveMenus(uid: String): List<MenuListResponse> = dbFactory.dbQuery {
+        getBaseListMenu()
+            .select { (MenuTable.isExclusive eq true) }
+            .groupBy(MenuTable.menuId, FavoriteTable.uid)
+            .map { it.toMenuListResponse(uid) }
+    }
+
+
     override suspend fun getCategorizedMenus(uid: String, category: String): List<MenuListResponse> = dbFactory.dbQuery {
         getBaseListMenu()
             .select { (MenuTable.category eq category) }

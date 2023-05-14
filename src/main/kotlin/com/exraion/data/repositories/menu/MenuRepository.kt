@@ -14,6 +14,7 @@ interface MenuRepository {
     suspend fun insertTool(menuId: String, tool: String)
     suspend fun getRandomMenus(uid: String): List<MenuListResponse>
     suspend fun getDietMenus(uid: String): List<MenuListResponse>
+    suspend fun getExclusiveMenus(uid: String): List<MenuListResponse>
     suspend fun getCategorizedMenus(uid: String, category: String): List<MenuListResponse>
     suspend fun getMenusBySearch(uid: String, query: String): List<MenuListResponse>
     suspend fun getDetailMenu(uid: String, menuId: String): MenuDetailResponse
