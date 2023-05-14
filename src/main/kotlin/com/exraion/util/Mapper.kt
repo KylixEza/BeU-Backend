@@ -43,7 +43,8 @@ fun ResultRow.toMenuListResponse(uid: String) = MenuListResponse(
     rangePrice = "Rp ${this[MenuTable.startPrice]} - Rp ${this[MenuTable.endPrice]}",
     rating = this[Avg(ReviewTable.rating, 1).alias("rating")] ?: BigDecimal.valueOf(0.0),
     cookTime = this[MenuTable.cookTime],
-    isFavorite = this[FavoriteTable.uid] == uid
+    isFavorite = this[FavoriteTable.uid] == uid,
+    isExclusive = this[MenuTable.isExclusive]
 )
 
 fun ResultRow.toReviewResponse() = ReviewResponse(
