@@ -7,37 +7,37 @@ object Dummy {
     fun getInitialDailyXp() = listOf(
         DailyXp(
             "DAILYXP001",
-            5,
+            50,
             1
         ),
         DailyXp(
             "DAILYXP002",
-            10,
+            50,
             2
         ),
         DailyXp(
             "DAILYXP003",
-            15,
+            50,
             3
         ),
         DailyXp(
             "DAILYXP004",
-            20,
+            50,
             4
         ),
         DailyXp(
             "DAILYXP005",
-            25,
+            50,
             5
         ),
         DailyXp(
             "DAILYXP006",
-            30,
+            50,
             6
         ),
         DailyXp(
             "DAILYXP007",
-            35,
+            50,
             7
         ),
     )
