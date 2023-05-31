@@ -108,28 +108,37 @@ class VoucherRepositoryImpl(
             VoucherTable.voucherSecretRedeemKey.eq(voucherSecretRedeemKey)
         }.count() > 0
 
-        val voucherId = VoucherTable.select {
-            VoucherTable.voucherSecretRedeemKey.eq(voucherSecretRedeemKey)
-        }.firstNotNullOf { it[VoucherTable.voucherId] }
+        val response = if (isExist) {
 
-        val isAlreadyClaimed = VoucherUserTable.select {
-            (VoucherUserTable.uid.eq(uid)) and (VoucherUserTable.voucherId.eq(voucherId))
-        }.count() > 0
+            val voucherId = VoucherTable.select {
+                VoucherTable.voucherSecretRedeemKey.eq(voucherSecretRedeemKey)
+            }.map { it[VoucherTable.voucherId] }.first()
 
-        val response = if (isExist && isAlreadyClaimed.not()) {
-            VoucherUserTable.insert {
-                it[this.uid] = uid
-                it[this.voucherId] = voucherId
-                it[this.isUsed] = false
+            val isAlreadyClaimed = VoucherUserTable.select {
+                (VoucherUserTable.uid.eq(uid)) and (VoucherUserTable.voucherId.eq(voucherId))
+            }.count() > 0
+
+            if(isAlreadyClaimed) {
+                VoucherSecretResponse(
+                    false,
+                    "Voucher already claimed"
+                )
+            } else {
+                VoucherUserTable.insert {
+                    it[this.uid] = uid
+                    it[this.voucherId] = voucherId
+                    it[this.isUsed] = false
+                }
+                VoucherSecretResponse(
+                    true,
+                    "Voucher successfully claimed"
+                )
             }
-            VoucherSecretResponse(
-                true,
-                "Voucher successfully claimed"
-            )
+
         } else {
             VoucherSecretResponse(
                 false,
-                "Voucher already claimed or not exist"
+                "Voucher not exist"
             )
         }
 
