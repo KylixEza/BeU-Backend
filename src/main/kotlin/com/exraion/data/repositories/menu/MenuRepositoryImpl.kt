@@ -12,6 +12,7 @@ import com.exraion.util.toIngredientResponse
 import com.exraion.util.toMenuDetailResponse
 import com.exraion.util.toMenuListResponse
 import com.exraion.util.toReviewResponse
+import io.ktor.util.*
 import org.jetbrains.exposed.sql.*
 
 class MenuRepositoryImpl(
@@ -139,7 +140,7 @@ class MenuRepositoryImpl(
 
     override suspend fun getMenusBySearch(uid: String, query: String): List<MenuListResponse> = dbFactory.dbQuery {
         getBaseListMenu()
-            .select { (MenuTable.title like "%$query%") }
+            .select { (MenuTable.title.lowerCase().trim() like "%${query.toLowerCasePreservingASCIIRules().trim()}%" ) }
             .groupBy(MenuTable.menuId, FavoriteTable.uid)
             .map { it.toMenuListResponse(uid) }
     }
